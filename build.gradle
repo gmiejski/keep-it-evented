@@ -35,14 +35,22 @@ repositories {
 
 
 dependencies {
-//	compile('org.springframework.boot:spring-boot-starter-data-cassandra')
+	compile('org.springframework.boot:spring-boot-starter-data-cassandra')
+	compile group: 'org.apache.cassandra', name: 'cassandra-all', version: '3.11.1'
+	compile group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: '3.3.2'
+	compile group: 'org.cassandraunit', name: 'cassandra-unit', version: '3.3.0.2' // make testCompile
+
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+
+	compile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.1'
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
 	testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
 	testCompile group: 'org.spockframework', name: 'spock-spring', version: '1.1-groovy-2.4'
+
 }
 
 sourceSets {
