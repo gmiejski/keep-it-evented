@@ -1,11 +1,11 @@
 package org.miejski.keepit.infrastructure.cassandra.eventstore
 
 import org.miejski.keepit.domain.notes.events.Event
-import org.miejski.keepit.domain.notes.NoteAggregateID
+import org.miejski.keepit.domain.notes.NotesAggregateID
 
 interface EventStore {
 
-    fun getAll(aggregateID: NoteAggregateID): List<Event>
-    fun saveEvent(aggregateID: NoteAggregateID, event: Event)
-    fun saveAll(aggregateID: NoteAggregateID, events: List<Event>)
+    fun getAll(aggregateID: NotesAggregateID): List<Event>
+    fun saveEvent(aggregateID: NotesAggregateID, event: Event)
+    fun saveAll(aggregateID: NotesAggregateID, events: List<Event>)
 }

@@ -1,8 +1,6 @@
 package org.miejski.keepit.domain
 
-import org.miejski.keepit.domain.notes.NoteAggregateID
+interface Aggregate {
 
-interface Aggregate { // TODO make use
-
-    fun ID(): NoteAggregateID
+    fun ID(): String
 }
