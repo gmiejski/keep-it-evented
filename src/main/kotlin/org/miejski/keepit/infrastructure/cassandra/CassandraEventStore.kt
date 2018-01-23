@@ -1,27 +1,23 @@
 package org.miejski.keepit.infrastructure.cassandra
 
-import com.datastax.driver.core.Session
-import com.datastax.driver.mapping.MappingManager
-import org.miejski.keepit.domain.notes.NotesAggregateID
+import org.miejski.keepit.domain.notes.UserNotesAggregateID
 import org.miejski.keepit.domain.notes.events.Event
 import org.miejski.keepit.infrastructure.eventstore.EventStore
 
 
-class CassandraEventStore(val noteEventAccessor: NoteEventAccessor) : EventStore {
+class CassandraEventStore(val noteEventAccessor: NoteEventAccessor, val eventSerializer: EventSerializer) : EventStore {
 
-    override fun saveEvent(aggregateID: NotesAggregateID, event: Event) {
-
-//        noteEventAccessor.save(aggregateID.toString(), event.ID(), )
-
-//        eventsMap[aggregateID] = eventsMap.getOrDefault(aggregateID, listOf()).plus(event)
+    override fun saveEvent(aggregateIDUser: UserNotesAggregateID, event: Event) {
+        val saved = noteEventAccessor.save(aggregateIDUser.toString(), event.ID(), eventSerializer.serialize(event))
+        println(saved)
     }
 
-    override fun saveAll(aggregateID: NotesAggregateID, events: List<Event>) {
-//        eventsMap[aggregateID] = eventsMap.getOrDefault(aggregateID, listOf()).plus(events)
+    override fun saveAll(aggregateIDUser: UserNotesAggregateID, events: List<Event>) {
+        events.forEach { saveEvent(aggregateIDUser, it) }
     }
 
-    override fun getAll(aggregateID: NotesAggregateID): List<Event> {
-        return listOf()
-//        return eventsMap.getOrDefault(aggregateID, listOf())
+    override fun getAll(aggregateIDUser: UserNotesAggregateID): List<Event> {
+        val rows = noteEventAccessor.getAll(aggregateIDUser.toString())
+        return rows.map { eventSerializer.deserialize(it.eventBlob.array()) }
     }
 }

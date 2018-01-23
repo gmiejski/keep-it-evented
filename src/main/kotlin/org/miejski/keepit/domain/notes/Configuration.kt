@@ -4,6 +4,8 @@ import org.miejski.keepit.domain.notes.commands.NotesCommandHandler
 import org.miejski.keepit.domain.notes.events.NotesEventsHandler
 import org.miejski.keepit.domain.notes.repository.NotesRepository
 import org.miejski.keepit.infrastructure.cassandra.CassandraEventStore
+import org.miejski.keepit.infrastructure.cassandra.EventSerializer
+import org.miejski.keepit.infrastructure.cassandra.NoteEventAccessor
 import org.miejski.keepit.infrastructure.eventstore.InMemoryEventStore
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -19,9 +21,14 @@ class Configuration {
 
     @Bean
     @Profile("integration")
-    fun integrationNotesFacade(): NotesFacade {
-//        val notesRepository = NotesRepository(NotesCommandHandler(), NotesEventsHandler(), CassandraEventStore()) // TODO
-        val notesRepository = NotesRepository(NotesCommandHandler(), NotesEventsHandler(), InMemoryEventStore())
+    fun integrationNotesFacade(noteEventAccessor: NoteEventAccessor): NotesFacade {
+        val cassandraEventStore = CassandraEventStore(noteEventAccessor, eventSerializer())
+        val notesRepository = NotesRepository(NotesCommandHandler(), NotesEventsHandler(), cassandraEventStore)
         return NotesFacade(NotesService(notesRepository))
+    }
+
+    @Bean
+    fun eventSerializer(): EventSerializer {
+        return EventSerializer()
     }
 }
