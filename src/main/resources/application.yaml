@@ -1,0 +1,13 @@
+
+example:
+  value: 1
+
+spring:
+  data:
+    cassandra:
+      cluster-name: keep-it-evented
+      contact-points: localhost
+      keyspace-name: notes
+      port: 9142
+      repositories:
+        enabled: false

@@ -1,0 +1,15 @@
+spring.profiles.active: integration
+
+example:
+  value: 1
+
+
+spring:
+  data:
+    cassandra:
+      cluster-name: "Test Cluster"
+      contact-points: localhost
+      keyspace-name: notes
+      port: 9142
+      repositories:
+        enabled: false
