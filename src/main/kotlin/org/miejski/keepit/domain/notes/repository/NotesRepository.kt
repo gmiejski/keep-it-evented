@@ -6,7 +6,7 @@ import org.miejski.keepit.domain.notes.CreateNotesAggregateID
 import org.miejski.keepit.domain.notes.commands.CreateNoteCommand
 import org.miejski.keepit.domain.notes.commands.NotesCommandHandler
 import org.miejski.keepit.domain.notes.events.NotesEventsHandler
-import org.miejski.keepit.infrastructure.cassandra.eventstore.EventStore
+import org.miejski.keepit.infrastructure.eventstore.EventStore
 
 class NotesRepository(
     val commandHandler: NotesCommandHandler,

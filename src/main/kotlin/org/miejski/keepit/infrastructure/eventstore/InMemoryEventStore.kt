@@ -1,4 +1,4 @@
-package org.miejski.keepit.infrastructure.cassandra.eventstore
+package org.miejski.keepit.infrastructure.eventstore
 
 import org.miejski.keepit.domain.notes.events.Event
 import org.miejski.keepit.domain.notes.NotesAggregateID

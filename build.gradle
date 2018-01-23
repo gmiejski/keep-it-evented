@@ -33,12 +33,13 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-data-cassandra')
+//	compile('org.springframework.boot:spring-boot-starter-data-cassandra')
 	compile group: 'org.apache.cassandra', name: 'cassandra-all', version: '3.11.1'
 	compile group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: '3.3.2'
-	compile group: 'org.cassandraunit', name: 'cassandra-unit', version: '3.3.0.2' // make testCompile
+	compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: '3.3.2'
+
+	testCompile group: 'org.cassandraunit', name: 'cassandra-unit', version: '3.3.0.2' // make testCompile
 
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
