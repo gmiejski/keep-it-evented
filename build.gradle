@@ -43,6 +43,8 @@ dependencies {
 	compile group: 'org.apache.cassandra', name: 'cassandra-all', version: '3.11.1'
 	compile group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: '3.3.2'
 	compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: '3.3.2'
+	compile group: 'com.datastax.cassandra', name: 'cassandra-driver-extras', version: '3.3.2'
+
 	testCompile group: 'org.cassandraunit', name: 'cassandra-unit', version: '3.3.0.2'
 
 	compile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.1'

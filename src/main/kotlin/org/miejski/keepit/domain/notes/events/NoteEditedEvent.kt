@@ -2,7 +2,7 @@ package org.miejski.keepit.domain.notes.events
 
 import java.time.ZonedDateTime
 
-data class NoteCreatedEvent(private val noteID: String = "", val content: String = "") : Event {
+data class NoteEditedEvent(private val noteID: String="", val newContent: String="") : Event {
 
     val eventTime = ZonedDateTime.now()
 
