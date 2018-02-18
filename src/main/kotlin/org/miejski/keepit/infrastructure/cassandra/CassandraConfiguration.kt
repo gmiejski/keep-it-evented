@@ -1,13 +1,15 @@
 package org.miejski.keepit.infrastructure.cassandra
 
 import com.datastax.driver.core.Cluster
+import com.datastax.driver.core.DataType
 import com.datastax.driver.core.Session
+import com.datastax.driver.extras.codecs.jdk8.ZonedDateTimeCodec
 import com.datastax.driver.mapping.MappingManager
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
+
 
 @Configuration
 class CassandraConfiguration constructor(val cassandraProperties: CassandraProperties) {
@@ -20,6 +22,12 @@ class CassandraConfiguration constructor(val cassandraProperties: CassandraPrope
             .addContactPoint(cassandraProperties.contactPoints)
             .withPort(9142)
             .build()
+
+        val tupleType = cluster.metadata
+            .newTupleType(DataType.timestamp(), DataType.varchar())
+        cluster.configuration.codecRegistry
+            .register(ZonedDateTimeCodec(tupleType))
+
         return cluster.connect(cassandraProperties.keyspaceName)
     }
 
