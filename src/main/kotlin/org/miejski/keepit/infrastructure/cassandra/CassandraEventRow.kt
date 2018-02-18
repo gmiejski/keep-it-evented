@@ -24,6 +24,6 @@ class CassandraEventRow {
     @Column(name = "event_blob")
     lateinit var eventBlob: ByteBuffer
 
-//    @Column(name = "event_mapper")
-//    lateinit var eventMapper: String
+    @Column(name = "event_mapper")
+    lateinit var eventMapper: String
 }

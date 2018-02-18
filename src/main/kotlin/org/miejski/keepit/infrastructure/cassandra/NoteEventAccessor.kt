@@ -16,7 +16,7 @@ interface NoteEventAccessor {
     @Query("SELECT * FROM notes_events where row_id=:row_id and agg_id=:agg_id")
     fun get(@Param("row_id") rowId: String, @Param("agg_id") noteID: String): Result<CassandraEventRow>
 
-    @Query("insert into notes_events (row_id, agg_id, event_time, event_blob) values (?, ?, ?, ?)")
-    fun save(rowId: String, aggId: String, eventTime: ZonedDateTime, event: ByteBuffer): Result<CassandraEventRow>
+    @Query("insert into notes_events (row_id, agg_id, event_time, event_blob, event_mapper) values (?, ?, ?, ?, ?)")
+    fun save(rowId: String, aggId: String, eventTime: ZonedDateTime, event: ByteBuffer, serializedUsed: String): Result<CassandraEventRow>
 
 }

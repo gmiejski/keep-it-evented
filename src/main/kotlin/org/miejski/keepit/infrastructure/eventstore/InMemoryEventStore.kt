@@ -5,12 +5,11 @@ import org.miejski.keepit.domain.notes.UserNotesAggregateID
 import java.util.concurrent.ConcurrentHashMap
 
 class InMemoryEventStore : EventStore {
-    override fun get(aggregateIDUser: UserNotesAggregateID, noteID: String): List<Event> {
-        TODO()
-        return eventsMap.getOrDefault(aggregateIDUser, listOf())
-    }
-
     private var eventsMap: MutableMap<UserNotesAggregateID, List<Event>> = ConcurrentHashMap()
+
+    override fun get(aggregateIDUser: UserNotesAggregateID, noteID: String): List<Event> {
+        return eventsMap.getOrDefault(aggregateIDUser, listOf()).filter { it.targetAggID() == noteID }
+    }
 
     override fun saveEvent(aggregateIDUser: UserNotesAggregateID, event: Event) {
         eventsMap[aggregateIDUser] = eventsMap.getOrDefault(aggregateIDUser, listOf()).plus(event)
@@ -21,7 +20,6 @@ class InMemoryEventStore : EventStore {
     }
 
     override fun getAll(aggregateIDUser: UserNotesAggregateID): List<Event> {
-        TODO()
         return eventsMap.getOrDefault(aggregateIDUser, listOf())
     }
 }
