@@ -1,6 +1,6 @@
 package org.miejski.keepit.infrastructure.eventstore
 
-import org.miejski.keepit.domain.notes.events.Event
+import org.miejski.keepit.domain.common.events.Event
 import org.miejski.keepit.domain.notes.UserNotesAggregateID
 import java.util.concurrent.ConcurrentHashMap
 

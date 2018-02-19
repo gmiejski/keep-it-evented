@@ -3,10 +3,8 @@ package org.miejski.keepit.domain.notes.repository
 import org.miejski.keepit.domain.notes.CreateNotesAggregateID
 import org.miejski.keepit.domain.notes.NewNote
 import org.miejski.keepit.domain.notes.Note
-import org.miejski.keepit.domain.notes.commands.Command
-import org.miejski.keepit.domain.notes.commands.NotesCommandHandler
-import org.miejski.keepit.domain.notes.events.Event
-import org.miejski.keepit.domain.notes.events.NotesEventsHandler
+import org.miejski.keepit.domain.common.commands.Command
+import org.miejski.keepit.domain.common.events.Event
 import org.miejski.keepit.infrastructure.eventstore.EventStore
 
 class NotesRepository(

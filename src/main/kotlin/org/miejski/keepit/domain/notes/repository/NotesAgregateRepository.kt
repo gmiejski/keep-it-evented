@@ -1,8 +1,7 @@
 package org.miejski.keepit.domain.notes.repository
 
 import org.miejski.keepit.domain.notes.Note
-import org.miejski.keepit.domain.notes.commands.Command
-import org.miejski.keepit.domain.notes.commands.CreateNoteCommand
+import org.miejski.keepit.domain.common.commands.Command
 
 interface NotesAgregateRepository {
     fun get(user: String, noteID: String): Note?

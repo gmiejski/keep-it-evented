@@ -1,7 +1,8 @@
 package org.miejski.keepit.domain.notes
 
-import org.miejski.keepit.domain.notes.commands.CreateNoteCommand
-import org.miejski.keepit.domain.notes.commands.EditNoteCommand
+import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
+import org.miejski.keepit.domain.notes.create.CreateNoteCommand
+import org.miejski.keepit.domain.notes.edit.EditNoteCommand
 import org.miejski.keepit.domain.notes.repository.NotesAgregateRepository
 
 class NotesService(val notesAgregateRepository: NotesAgregateRepository) {
@@ -11,12 +12,20 @@ class NotesService(val notesAgregateRepository: NotesAgregateRepository) {
     }
 
     fun editNote(user: String, command: EditNoteCommand): Note {
-        val note = notesAgregateRepository.get(user, command.noteID) ?: throw RuntimeException("Note not found") // TODO name exception
-
+        val note = notesAgregateRepository.get(user, command.noteID) ?: throw NoteNotFound(user, command.noteID)
         return notesAgregateRepository.update(user, note, command)
     }
 
-    fun getAll(user: String): List<Note> {
-        return notesAgregateRepository.getAll(user)
+    fun getAll(user: String, filters: Set<NoteType>): List<Note> {
+        return notesAgregateRepository.getAll(user).filter { filters.matchedBy(it) }
     }
+
+    fun archiveNote(user: String, command: ArchiveNoteCommand): Note {
+        val note = notesAgregateRepository.get(user, command.noteID) ?: throw NoteNotFound(user, command.noteID)
+        return notesAgregateRepository.update(user, note, command)
+    }
+}
+
+private fun Set<NoteType>.matchedBy(note: Note): Boolean {
+    return this.isEmpty() || this.any { it == note.type }
 }

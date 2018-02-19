@@ -4,9 +4,10 @@ import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.Input
 import com.esotericsoftware.kryo.io.Output
 import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer
-import org.miejski.keepit.domain.notes.events.Event
-import org.miejski.keepit.domain.notes.events.NoteCreatedEvent
-import org.miejski.keepit.domain.notes.events.NoteEditedEvent
+import org.miejski.keepit.domain.common.events.Event
+import org.miejski.keepit.domain.notes.archive.NoteArchivedEvent
+import org.miejski.keepit.domain.notes.create.NoteCreatedEvent
+import org.miejski.keepit.domain.notes.edit.NoteEditedEvent
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import kotlin.concurrent.getOrSet
@@ -17,7 +18,8 @@ class EventSerializer {
 
     val classByName = mapOf(
         Pair(NoteCreatedEvent::class.java.simpleName, NoteCreatedEvent::class.javaObjectType),
-        Pair(NoteEditedEvent::class.java.simpleName, NoteEditedEvent::class.javaObjectType)
+        Pair(NoteEditedEvent::class.java.simpleName, NoteEditedEvent::class.javaObjectType),
+        Pair(NoteArchivedEvent::class.java.simpleName, NoteArchivedEvent::class.javaObjectType)
     )
 
     fun serialize(domainEvent: Event): Pair<ByteBuffer, String> {
@@ -35,6 +37,7 @@ class EventSerializer {
         val kryo = Kryo()
         kryo.register(NoteCreatedEvent::class.java, TaggedFieldSerializer<NoteCreatedEvent>(kryo, NoteCreatedEvent::class.javaObjectType))
         kryo.register(NoteEditedEvent::class.java, TaggedFieldSerializer<NoteEditedEvent>(kryo, NoteEditedEvent::class.javaObjectType))
+        kryo.register(NoteArchivedEvent::class.java, TaggedFieldSerializer<NoteArchivedEvent>(kryo, NoteArchivedEvent::class.javaObjectType))
         return kryo
     }
 }

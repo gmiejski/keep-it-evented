@@ -1,7 +1,7 @@
 package org.miejski.keepit.domain.notes
 
-import org.miejski.keepit.domain.notes.commands.NotesCommandHandler
-import org.miejski.keepit.domain.notes.events.NotesEventsHandler
+import org.miejski.keepit.domain.notes.repository.NotesCommandHandler
+import org.miejski.keepit.domain.notes.repository.NotesEventsHandler
 import org.miejski.keepit.domain.notes.repository.NotesRepository
 import org.miejski.keepit.infrastructure.cassandra.CassandraEventStore
 import org.miejski.keepit.infrastructure.cassandra.NoteEventAccessor
