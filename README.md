@@ -4,7 +4,7 @@
 Functionalities:
 - [x] user can create Note
 - [x] user can edit Note
-- [ ] user can archive Note
+- [x] user can archive Note
 - [ ] user can create TasksNote
 - [ ] user can add and remove Tasks to TasksNote
 - [ ] user can mark Tasks as done and unmark them

@@ -35,6 +35,4 @@ class NotesFacadeSpec extends Specification {
         def notes = notesFacade.getNotes(customerId, [NoteType.STANDARD] as Set)
         notes.notes*.content as Set == [createNoteCommand2]*.content as Set
     }
-
-
 }
