@@ -1,7 +1,7 @@
 package org.miejski.keepit.infrastructure.cassandra
 
-import org.miejski.keepit.domain.notes.events.NoteCreatedEvent
-import org.miejski.keepit.domain.notes.events.NoteEditedEvent
+import org.miejski.keepit.domain.notes.create.NoteCreatedEvent
+import org.miejski.keepit.domain.notes.edit.NoteEditedEvent
 import org.miejski.keepit.serialization.EventSerializer
 import spock.lang.Specification
 

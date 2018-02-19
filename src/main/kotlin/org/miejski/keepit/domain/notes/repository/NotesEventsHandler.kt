@@ -1,6 +1,7 @@
-package org.miejski.keepit.domain.notes.events
+package org.miejski.keepit.domain.notes.repository
 
 import org.miejski.keepit.domain.notes.Note
+import org.miejski.keepit.domain.common.events.Event
 
 class NotesEventsHandler {
     fun applyEvents(newNote: Note, events: List<Event>): Note {

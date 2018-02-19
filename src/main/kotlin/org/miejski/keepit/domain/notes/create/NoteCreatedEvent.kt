@@ -1,7 +1,7 @@
-package org.miejski.keepit.domain.notes.events
+package org.miejski.keepit.domain.notes.create
 
 import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer
-import java.time.ZonedDateTime
+import org.miejski.keepit.domain.common.events.BasicEvent
 
 data class NoteCreatedEvent(
     @field:TaggedFieldSerializer.Tag(1) private val noteID: String = "",

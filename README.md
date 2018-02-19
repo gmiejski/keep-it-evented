@@ -12,4 +12,5 @@ Functionalities:
 - [ ] user can move Tasks to another TaskNote
 - [ ] user can tag/untag notes and search for notes with tag
 - [ ] user can pin notes so that they will be on top of the view
+- [ ] user can delete note completely
 - [ ] user can search for text in his notes

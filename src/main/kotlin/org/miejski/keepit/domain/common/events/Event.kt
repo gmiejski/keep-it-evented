@@ -1,6 +1,5 @@
-package org.miejski.keepit.domain.notes.events
+package org.miejski.keepit.domain.common.events
 
-import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer
 import java.time.ZonedDateTime
 
 interface Event {

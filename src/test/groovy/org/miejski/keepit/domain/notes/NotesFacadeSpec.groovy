@@ -1,6 +1,7 @@
 package org.miejski.keepit.domain.notes
 
-import org.miejski.keepit.domain.notes.commands.CreateNoteCommand
+import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
+import org.miejski.keepit.domain.notes.create.CreateNoteCommand
 import spock.lang.Specification
 
 class NotesFacadeSpec extends Specification {
@@ -16,9 +17,24 @@ class NotesFacadeSpec extends Specification {
         notesFacade.createNote(customerId, createNoteCommand2)
 
         when:
-        def notes = notesFacade.getNotes(customerId)
+        def notes = notesFacade.getNotes(customerId, [] as Set)
 
         then:
         notes.notes*.content as Set == [createNoteCommand, createNoteCommand2]*.content as Set
     }
+
+    def "returns list of standard notes only"() {
+        given:
+        def note1 = notesFacade.createNote(customerId, createNoteCommand)
+        def note2 = notesFacade.createNote(customerId, createNoteCommand2)
+
+        when:
+        notesFacade.archiveNote(customerId, new ArchiveNoteCommand(note1.ID()))
+
+        then:
+        def notes = notesFacade.getNotes(customerId, [NoteType.STANDARD] as Set)
+        notes.notes*.content as Set == [createNoteCommand2]*.content as Set
+    }
+
+
 }
