@@ -2,7 +2,7 @@ package org.miejski.keepitup
 
 import org.miejski.keepit.api.NoteDto
 import org.miejski.keepit.api.NotesController
-import org.miejski.keepit.domain.notes.NoteType
+import org.miejski.keepit.domain.NoteType
 import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
 import org.miejski.keepit.domain.notes.create.CreateNoteCommand
 import org.miejski.keepit.domain.notes.edit.EditNoteCommand

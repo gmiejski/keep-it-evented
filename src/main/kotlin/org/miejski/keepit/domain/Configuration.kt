@@ -1,5 +1,11 @@
-package org.miejski.keepit.domain.notes
+package org.miejski.keepit.domain
 
+import org.miejski.keepit.domain.listNotes.ListNotesService
+import org.miejski.keepit.domain.listNotes.repository.ListNotesCommandHandler
+import org.miejski.keepit.domain.listNotes.repository.ListNotesEventsHandler
+import org.miejski.keepit.domain.listNotes.repository.ListNotesRepository
+import org.miejski.keepit.domain.notes.NotesFacade
+import org.miejski.keepit.domain.notes.NotesService
 import org.miejski.keepit.domain.notes.repository.NotesCommandHandler
 import org.miejski.keepit.domain.notes.repository.NotesEventsHandler
 import org.miejski.keepit.domain.notes.repository.NotesRepository
@@ -15,8 +21,10 @@ import org.springframework.context.annotation.Profile
 class Configuration {
 
     fun testNotesFacade(): NotesFacade {
-        val notesRepository = NotesRepository(NotesCommandHandler(), NotesEventsHandler(), InMemoryEventStore())
-        return NotesFacade(NotesService(notesRepository))
+        val eventStore = InMemoryEventStore()
+        val notesRepository = NotesRepository(NotesCommandHandler(), NotesEventsHandler(), eventStore)
+        val listNotesRepository = ListNotesRepository(ListNotesCommandHandler(), ListNotesEventsHandler(), eventStore)
+        return NotesFacade(NotesService(notesRepository), ListNotesService(listNotesRepository))
     }
 
     @Bean
@@ -24,7 +32,8 @@ class Configuration {
     fun integrationNotesFacade(noteEventAccessor: NoteEventAccessor): NotesFacade {
         val cassandraEventStore = CassandraEventStore(noteEventAccessor, eventSerializer())
         val notesRepository = NotesRepository(NotesCommandHandler(), NotesEventsHandler(), cassandraEventStore)
-        return NotesFacade(NotesService(notesRepository))
+        val listNotesRepository = ListNotesRepository(ListNotesCommandHandler(), ListNotesEventsHandler(), cassandraEventStore)
+        return NotesFacade(NotesService(notesRepository), ListNotesService(listNotesRepository))
     }
 
     @Bean

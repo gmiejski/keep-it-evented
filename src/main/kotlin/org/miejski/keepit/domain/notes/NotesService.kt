@@ -1,5 +1,6 @@
 package org.miejski.keepit.domain.notes
 
+import org.miejski.keepit.domain.NoteType
 import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
 import org.miejski.keepit.domain.notes.create.CreateNoteCommand
 import org.miejski.keepit.domain.notes.edit.EditNoteCommand
