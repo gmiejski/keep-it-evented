@@ -10,7 +10,7 @@ import org.miejski.keepit.domain.notes.edit.NoteEditedEvent
 
 
 
-class Note(private var content: String) : Aggregate {
+class Note(private var content: String) : Aggregate<Note> {
 
     private lateinit var id: String
     var type: NoteType = NoteType.STANDARD
@@ -24,7 +24,7 @@ class Note(private var content: String) : Aggregate {
         return NoteDto(content)
     }
 
-    fun applyEvent(event: Event): Note {
+    override fun applyEvent(event: Event): Note {
         when (event) {
             is NoteCreatedEvent -> {
                 this.content = event.content

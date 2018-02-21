@@ -1,5 +1,8 @@
 package org.miejski.keepit.domain.notes.repository
 
+import org.miejski.keepit.domain.AggregateRepository
+import org.miejski.keepit.domain.CommandHandler
+import org.miejski.keepit.domain.EventsHandler
 import org.miejski.keepit.domain.notes.CreateNotesAggregateID
 import org.miejski.keepit.domain.notes.NewNote
 import org.miejski.keepit.domain.notes.Note
@@ -8,12 +11,12 @@ import org.miejski.keepit.domain.common.events.Event
 import org.miejski.keepit.infrastructure.eventstore.EventStore
 
 class NotesRepository(
-    val commandHandler: NotesCommandHandler,
-    val notesEventsHandler: NotesEventsHandler,
-    val eventStore: EventStore) : NotesAgregateRepository {
+    val commandHandler: CommandHandler<Note>,
+    val notesEventsHandler: EventsHandler,
+    val eventStore: EventStore) : AggregateRepository<Note> {
 
-    override fun get(user: String, noteID: String): Note? {
-        val allEvents = eventStore.get(CreateNotesAggregateID(user), noteID)
+    override fun get(user: String, aggregateID: String): Note? {
+        val allEvents = eventStore.get(CreateNotesAggregateID(user), aggregateID)
         return when (allEvents) {
             emptyList<Event>() -> null
             else -> notesEventsHandler.applyEvents(NewNote(), allEvents)

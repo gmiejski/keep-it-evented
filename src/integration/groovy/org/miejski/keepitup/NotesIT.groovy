@@ -34,7 +34,6 @@ class NotesIT extends MainTest {
 
         then:
         notes.notes as Set == standardNotes.notes as Set
-
     }
 
     def "updated note has new content and new last modification date"() {

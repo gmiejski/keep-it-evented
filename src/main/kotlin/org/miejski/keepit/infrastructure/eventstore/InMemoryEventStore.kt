@@ -7,8 +7,8 @@ import java.util.concurrent.ConcurrentHashMap
 class InMemoryEventStore : EventStore {
     private var eventsMap: MutableMap<String, List<Event>> = ConcurrentHashMap()
 
-    override fun get(aggregateIDUser: AggregateNameID, noteID: String): List<Event> {
-        return eventsMap.getOrDefault(aggregateIDUser.toString(), listOf()).filter { it.targetAggID() == noteID }
+    override fun get(aggregateNameID: AggregateNameID, aggregateID: String): List<Event> {
+        return eventsMap.getOrDefault(aggregateNameID.toString(), listOf()).filter { it.targetAggID() == aggregateID }
     }
 
     override fun saveEvent(aggregateIDUser: AggregateNameID, event: Event) {

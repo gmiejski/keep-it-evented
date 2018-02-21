@@ -1,19 +1,19 @@
 package org.miejski.keepit.domain.listNotes.repository
 
-import org.miejski.keepit.domain.notes.CreateNotesAggregateID
-import org.miejski.keepit.domain.notes.NewNote
-import org.miejski.keepit.domain.notes.Note
+import org.miejski.keepit.domain.AggregateRepository
+import org.miejski.keepit.domain.EventsHandler
 import org.miejski.keepit.domain.common.commands.Command
 import org.miejski.keepit.domain.common.events.Event
 import org.miejski.keepit.domain.listNotes.CreateListNotesAggregateID
 import org.miejski.keepit.domain.listNotes.ListNote
 import org.miejski.keepit.domain.listNotes.NewListNote
+import org.miejski.keepit.domain.notes.CreateNotesAggregateID
 import org.miejski.keepit.infrastructure.eventstore.EventStore
 
 class ListNotesRepository(
     val commandHandlerList: ListNotesCommandHandler,
-    val listNotesEventsHandler: ListNotesEventsHandler,
-    val eventStore: EventStore) : ListNotesAggregateRepository {
+    val listNotesEventsHandler: EventsHandler,
+    val eventStore: EventStore) : AggregateRepository<ListNote> {
 
     override fun update(user: String, note: ListNote, command: Command): ListNote {
         val events = commandHandlerList.applyCommand(user, note, command)
@@ -21,8 +21,8 @@ class ListNotesRepository(
         return listNotesEventsHandler.applyEvents(note, events)
     }
 
-    override fun get(user: String, noteID: String): ListNote? {
-        val allEvents = eventStore.get(CreateNotesAggregateID(user), noteID)
+    override fun get(user: String, aggregateID: String): ListNote? {
+        val allEvents = eventStore.get(CreateNotesAggregateID(user), aggregateID)
         return when (allEvents) {
             emptyList<Event>() -> null
             else -> listNotesEventsHandler.applyEvents(NewListNote(), allEvents)

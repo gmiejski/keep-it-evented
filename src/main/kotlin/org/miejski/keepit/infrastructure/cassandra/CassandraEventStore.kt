@@ -12,8 +12,8 @@ class CassandraEventStore(val noteEventAccessor: NoteEventAccessor, val eventSer
         return rows.map { eventSerializer.deserialize(it.eventBlob.array(), it.eventMapper) }
     }
 
-    override fun get(aggregateIDUser: AggregateNameID, noteID: String): List<Event> {
-        val rows = noteEventAccessor.get(aggregateIDUser.toString(), noteID)
+    override fun get(aggregateNameID: AggregateNameID, aggregateID: String): List<Event> {
+        val rows = noteEventAccessor.get(aggregateNameID.toString(), aggregateID)
         return rows.map { eventSerializer.deserialize(it.eventBlob.array(), it.eventMapper) }
     }
 

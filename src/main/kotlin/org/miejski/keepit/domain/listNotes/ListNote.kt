@@ -3,20 +3,21 @@ package org.miejski.keepit.domain.listNotes
 import org.miejski.keepit.domain.Aggregate
 import org.miejski.keepit.domain.common.events.Event
 
-class ListNote : Aggregate{
+
+class ListNote : Aggregate<ListNote> {
     override fun ID(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     fun toDto(): ListNoteDTO {
         TODO("not implemented")
     }
 
-    fun applyEvent(event: Event) {
-
+    override fun applyEvent(event: Event): ListNote {
+        TODO("not implemented")
     }
 }
 
-fun NewListNote() : ListNote {
+fun NewListNote(): ListNote {
     return ListNote()
 }

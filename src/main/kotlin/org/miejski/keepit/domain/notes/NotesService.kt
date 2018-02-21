@@ -1,12 +1,12 @@
 package org.miejski.keepit.domain.notes
 
+import org.miejski.keepit.domain.AggregateRepository
 import org.miejski.keepit.domain.NoteType
 import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
 import org.miejski.keepit.domain.notes.create.CreateNoteCommand
 import org.miejski.keepit.domain.notes.edit.EditNoteCommand
-import org.miejski.keepit.domain.notes.repository.NotesAgregateRepository
 
-class NotesService(val notesAgregateRepository: NotesAgregateRepository) {
+class NotesService(val notesAgregateRepository: AggregateRepository<Note>) {
 
     fun createNote(user: String, command: CreateNoteCommand): Note {
         return notesAgregateRepository.update(user, NewNote(), command)
