@@ -1,7 +1,6 @@
 package org.miejski.keepit.api
 
 import org.miejski.keepit.domain.NoteType
-import org.miejski.keepit.domain.listNotes.ListNotesFacade
 import org.miejski.keepit.domain.notes.NotesFacade
 import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
 import org.miejski.keepit.domain.notes.create.CreateNoteCommand
