@@ -1,12 +1,14 @@
 package org.miejski.keepit.domain
 
+import org.miejski.keepit.domain.aggregate.EventSourcedRepository
+import org.miejski.keepit.domain.aggregate.EventsHandler
 import org.miejski.keepit.domain.listNotes.ListNotesService
+import org.miejski.keepit.domain.listNotes.NewListNote
 import org.miejski.keepit.domain.listNotes.repository.ListNotesCommandHandler
-import org.miejski.keepit.domain.listNotes.repository.ListNotesRepository
+import org.miejski.keepit.domain.notes.NewNote
 import org.miejski.keepit.domain.notes.NotesFacade
 import org.miejski.keepit.domain.notes.NotesService
 import org.miejski.keepit.domain.notes.repository.NotesCommandHandler
-import org.miejski.keepit.domain.notes.repository.NotesRepository
 import org.miejski.keepit.infrastructure.cassandra.CassandraEventStore
 import org.miejski.keepit.infrastructure.cassandra.NoteEventAccessor
 import org.miejski.keepit.infrastructure.eventstore.InMemoryEventStore
@@ -20,8 +22,8 @@ class Configuration {
 
     fun testNotesFacade(): NotesFacade {
         val eventStore = InMemoryEventStore()
-        val notesRepository = NotesRepository(NotesCommandHandler(), EventsHandler(), eventStore)
-        val listNotesRepository = ListNotesRepository(ListNotesCommandHandler(), EventsHandler(), eventStore)
+        val notesRepository = EventSourcedRepository(NotesCommandHandler(), EventsHandler(), eventStore, { NewNote() })
+        val listNotesRepository = EventSourcedRepository(ListNotesCommandHandler(), EventsHandler(), eventStore, { NewListNote() })
         return NotesFacade(NotesService(notesRepository), ListNotesService(listNotesRepository))
     }
 
@@ -29,8 +31,8 @@ class Configuration {
     @Profile("integration")
     fun integrationNotesFacade(noteEventAccessor: NoteEventAccessor): NotesFacade {
         val cassandraEventStore = CassandraEventStore(noteEventAccessor, eventSerializer())
-        val notesRepository = NotesRepository(NotesCommandHandler(), EventsHandler(), cassandraEventStore)
-        val listNotesRepository = ListNotesRepository(ListNotesCommandHandler(), EventsHandler(), cassandraEventStore)
+        val notesRepository = EventSourcedRepository(NotesCommandHandler(), EventsHandler(), cassandraEventStore, { NewNote() })
+        val listNotesRepository = EventSourcedRepository(ListNotesCommandHandler(), EventsHandler(), cassandraEventStore, { NewListNote() })
         return NotesFacade(NotesService(notesRepository), ListNotesService(listNotesRepository))
     }
 

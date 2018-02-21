@@ -1,10 +1,10 @@
-package org.miejski.keepit.domain
+package org.miejski.keepit.domain.aggregate
 
 import org.miejski.keepit.domain.common.events.Event
 
-interface Aggregate<T> {
+interface Aggregate {
     fun ID(): String
-    fun applyEvent(event: Event): T
+    fun applyEvent(event: Event)
 }
 
 fun aggregateNameID(user: String, aggName: String): AggregateNameID {

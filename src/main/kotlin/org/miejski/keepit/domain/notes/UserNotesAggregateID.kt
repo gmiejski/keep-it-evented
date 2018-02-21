@@ -1,7 +1,7 @@
 package org.miejski.keepit.domain.notes
 
-import org.miejski.keepit.domain.AggregateNameID
-import org.miejski.keepit.domain.aggregateNameID
+import org.miejski.keepit.domain.aggregate.AggregateNameID
+import org.miejski.keepit.domain.aggregate.aggregateNameID
 
 const val NOTES_AGGREGATE_NAME = "NoteAggregate"
 

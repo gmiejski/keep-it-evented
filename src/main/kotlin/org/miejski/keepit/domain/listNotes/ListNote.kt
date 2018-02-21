@@ -1,10 +1,10 @@
 package org.miejski.keepit.domain.listNotes
 
-import org.miejski.keepit.domain.Aggregate
+import org.miejski.keepit.domain.aggregate.Aggregate
 import org.miejski.keepit.domain.common.events.Event
 
 
-class ListNote : Aggregate<ListNote> {
+class ListNote : Aggregate {
     override fun ID(): String {
         TODO("not implemented")
     }
@@ -13,7 +13,7 @@ class ListNote : Aggregate<ListNote> {
         TODO("not implemented")
     }
 
-    override fun applyEvent(event: Event): ListNote {
+    override fun applyEvent(event: Event) {
         TODO("not implemented")
     }
 }

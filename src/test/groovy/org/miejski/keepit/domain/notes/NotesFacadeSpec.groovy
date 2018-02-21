@@ -1,5 +1,6 @@
 package org.miejski.keepit.domain.notes
 
+import org.miejski.keepit.api.NoteDto
 import org.miejski.keepit.domain.Configuration
 import org.miejski.keepit.domain.NoteType
 import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
@@ -37,4 +38,29 @@ class NotesFacadeSpec extends Specification {
         def notes = notesFacade.getNotes(customerId, [NoteType.STANDARD] as Set)
         notes.notes*.content as Set == [createNoteCommand2]*.content as Set
     }
+
+    def "Archived notes are not retrieved only on archived notes listing"() {
+        given:
+        def note1 = notesFacade.createNote(customerId, createNoteCommand)
+        def note2 = notesFacade.createNote(customerId, createNoteCommand2)
+
+        when:
+        def noteArchievedResponse = notesFacade.archiveNote(customerId, new ArchiveNoteCommand(note2.ID()))
+
+        then:
+        noteArchievedResponse.ID() == note2.ID()
+
+        when: "retrieving archived notes"
+        def archievedNotesResponse = notesFacade.getNotes(customerId, [NoteType.ARCHIVED] as Set)
+
+        then: "archived notes are returned only"
+        archievedNotesResponse.notes as Set == [new NoteDto(note2.content)] as Set
+
+        and: "when retrieving standard notes"
+        def standardNotesResponse = notesFacade.getNotes(customerId, [NoteType.STANDARD] as Set)
+
+        then: "only non-archived are returned"
+        standardNotesResponse.notes as Set == [new NoteDto(note1.content)] as Set
+    }
+
 }
