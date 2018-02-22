@@ -5,6 +5,7 @@ import org.miejski.keepit.api.NotesDto
 import org.miejski.keepit.domain.listNotes.ListNoteDTO
 import org.miejski.keepit.domain.listNotes.ListNotesDTO
 import org.miejski.keepit.domain.listNotes.ListNotesService
+import org.miejski.keepit.domain.listNotes.complete.CompleteItemCommand
 import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
 import org.miejski.keepit.domain.listNotes.items.AddListItemCommand
 import org.miejski.keepit.domain.notes.NotesService
@@ -41,6 +42,11 @@ class NotesFacade(private val notesService: NotesService, private val listNotesS
     fun addListItem(user: String, command: AddListItemCommand): ListNoteDTO {
         return listNotesService.addListItem(user, command).toDto()
     }
+
+    fun completeItem(user: String, command: CompleteItemCommand) {
+        listNotesService.completeItem(user, command)
+    }
+
 }
 
 

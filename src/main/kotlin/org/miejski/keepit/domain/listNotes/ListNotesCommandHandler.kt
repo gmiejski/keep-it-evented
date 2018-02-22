@@ -4,6 +4,8 @@ import org.miejski.keepit.domain.aggregate.CommandHandler
 import org.miejski.keepit.domain.common.commands.Command
 import org.miejski.keepit.domain.common.commands.UnknownCommand
 import org.miejski.keepit.domain.common.events.Event
+import org.miejski.keepit.domain.listNotes.complete.CompleteItemCommand
+import org.miejski.keepit.domain.listNotes.complete.ListItemCompletedEvent
 import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
 import org.miejski.keepit.domain.listNotes.create.ListNoteCreatedEvent
 import org.miejski.keepit.domain.listNotes.create.ListNoteItem
@@ -18,6 +20,7 @@ class ListNotesCommandHandler : CommandHandler<ListNote> {
                 ListNoteCreatedEvent(randomUUID().toString(), command.tasks.toListNoteItems())
             )
             is AddListItemCommand -> listOf(ListItemAddedEvent(command.noteID, command.content.toListNoteItem()))
+            is CompleteItemCommand -> listOf(ListItemCompletedEvent(command.noteID, command.itemID))
             else -> throw UnknownCommand(command)
         }
     }
