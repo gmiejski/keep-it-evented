@@ -5,10 +5,10 @@ import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
 
 class ListNotesService(val listNotesRepository: DomainRepository<ListNote>) {
     fun createListNote(user: String, command: CreateListNoteCommand): ListNote {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return listNotesRepository.update(CreateListNotesAggregateID(user), NewListNote(), command)
     }
 
-    fun create(): ListNote {
-        TODO()
+    fun getAll(user: String): List<ListNote> {
+        return listNotesRepository.getAll(CreateListNotesAggregateID(user))
     }
 }

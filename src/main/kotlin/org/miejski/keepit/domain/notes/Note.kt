@@ -20,7 +20,7 @@ class Note(private var content: String) : Aggregate {
     }
 
     fun toDto(): NoteDto {
-        return NoteDto(content)
+        return NoteDto(ID(), content)
     }
 
     override fun applyEvent(event: Event) {

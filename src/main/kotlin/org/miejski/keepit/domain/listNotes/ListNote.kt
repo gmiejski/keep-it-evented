@@ -2,19 +2,30 @@ package org.miejski.keepit.domain.listNotes
 
 import org.miejski.keepit.domain.aggregate.Aggregate
 import org.miejski.keepit.domain.common.events.Event
+import org.miejski.keepit.domain.listNotes.create.ListNoteCreatedEvent
+import org.miejski.keepit.domain.listNotes.items.Item
 
 
 class ListNote : Aggregate {
+
+    private lateinit var items: List<Item>
+    private lateinit var id: String
+
     override fun ID(): String {
-        TODO("not implemented")
+        return id
     }
 
     fun toDto(): ListNoteDTO {
-        TODO("not implemented")
+        return ListNoteDTO(ID(), items.map { it.toDto() })
     }
 
     override fun applyEvent(event: Event) {
-        TODO("not implemented")
+        when (event) {
+            is ListNoteCreatedEvent -> {
+                this.items = event.content.map { Item(it.id, it.content) }
+                this.id = event.targetAggID()
+            }
+        }
     }
 }
 

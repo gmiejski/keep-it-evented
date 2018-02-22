@@ -2,13 +2,16 @@ package org.miejski.keepit.domain
 
 import org.miejski.keepit.domain.aggregate.EventSourcedRepository
 import org.miejski.keepit.domain.aggregate.EventsHandler
+import org.miejski.keepit.domain.listNotes.ListNotesCommandHandler
 import org.miejski.keepit.domain.listNotes.ListNotesService
 import org.miejski.keepit.domain.listNotes.NewListNote
-import org.miejski.keepit.domain.listNotes.repository.ListNotesCommandHandler
+import org.miejski.keepit.domain.listNotes.create.ListNoteCreatedEvent
 import org.miejski.keepit.domain.notes.NewNote
-import org.miejski.keepit.domain.notes.NotesFacade
+import org.miejski.keepit.domain.notes.NotesCommandHandler
 import org.miejski.keepit.domain.notes.NotesService
-import org.miejski.keepit.domain.notes.repository.NotesCommandHandler
+import org.miejski.keepit.domain.notes.archive.NoteArchivedEvent
+import org.miejski.keepit.domain.notes.create.NoteCreatedEvent
+import org.miejski.keepit.domain.notes.edit.NoteEditedEvent
 import org.miejski.keepit.infrastructure.cassandra.CassandraEventStore
 import org.miejski.keepit.infrastructure.cassandra.NoteEventAccessor
 import org.miejski.keepit.infrastructure.eventstore.InMemoryEventStore
@@ -38,6 +41,11 @@ class Configuration {
 
     @Bean
     fun eventSerializer(): EventSerializer {
-        return EventSerializer()
+        return EventSerializer(listOf(
+            NoteCreatedEvent::class.java,
+            NoteEditedEvent::class.java,
+            NoteArchivedEvent::class.java,
+            ListNoteCreatedEvent::class.java
+        ))
     }
 }

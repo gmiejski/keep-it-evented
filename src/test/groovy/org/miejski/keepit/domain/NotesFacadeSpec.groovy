@@ -1,8 +1,6 @@
-package org.miejski.keepit.domain.notes
+package org.miejski.keepit.domain
 
 import org.miejski.keepit.api.NoteDto
-import org.miejski.keepit.domain.Configuration
-import org.miejski.keepit.domain.NoteType
 import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
 import org.miejski.keepit.domain.notes.create.CreateNoteCommand
 import spock.lang.Specification
@@ -14,7 +12,7 @@ class NotesFacadeSpec extends Specification {
     def createNoteCommand2 = new CreateNoteCommand("Second note")
     def customerId = UUID.randomUUID().toString()
 
-    def "returns list of text notes created by user"() {
+    def "returns list of notes created by user"() {
         given:
         notesFacade.createNote(customerId, createNoteCommand)
         notesFacade.createNote(customerId, createNoteCommand2)
@@ -32,7 +30,7 @@ class NotesFacadeSpec extends Specification {
         def note2 = notesFacade.createNote(customerId, createNoteCommand2)
 
         when:
-        notesFacade.archiveNote(customerId, new ArchiveNoteCommand(note1.ID()))
+        notesFacade.archiveNote(customerId, new ArchiveNoteCommand(note1.id))
 
         then:
         def notes = notesFacade.getNotes(customerId, [NoteType.STANDARD] as Set)
@@ -45,22 +43,22 @@ class NotesFacadeSpec extends Specification {
         def note2 = notesFacade.createNote(customerId, createNoteCommand2)
 
         when:
-        def noteArchievedResponse = notesFacade.archiveNote(customerId, new ArchiveNoteCommand(note2.ID()))
+        def noteArchievedResponse = notesFacade.archiveNote(customerId, new ArchiveNoteCommand(note2.id))
 
         then:
-        noteArchievedResponse.ID() == note2.ID()
+        noteArchievedResponse.id == note2.id
 
         when: "retrieving archived notes"
         def archievedNotesResponse = notesFacade.getNotes(customerId, [NoteType.ARCHIVED] as Set)
 
         then: "archived notes are returned only"
-        archievedNotesResponse.notes as Set == [new NoteDto(note2.content)] as Set
+        archievedNotesResponse.notes as Set == [new NoteDto(note2.id, note2.content)] as Set
 
         and: "when retrieving standard notes"
         def standardNotesResponse = notesFacade.getNotes(customerId, [NoteType.STANDARD] as Set)
 
         then: "only non-archived are returned"
-        standardNotesResponse.notes as Set == [new NoteDto(note1.content)] as Set
+        standardNotesResponse.notes as Set == [new NoteDto(note1.id, note1.content)] as Set
     }
 
 }
