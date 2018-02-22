@@ -12,4 +12,6 @@ data class ListNoteCreatedEvent(
     }
 }
 
-data class ListNoteItem(val id: String, val content: String)
+data class ListNoteItem(
+    @field:TaggedFieldSerializer.Tag(0) val id: String = "",
+    @field:TaggedFieldSerializer.Tag(1) val content: String = "")
