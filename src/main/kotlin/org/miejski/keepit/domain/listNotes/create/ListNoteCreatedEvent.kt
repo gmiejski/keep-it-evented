@@ -2,6 +2,7 @@ package org.miejski.keepit.domain.listNotes.create
 
 import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer
 import org.miejski.keepit.domain.common.events.BasicEvent
+import org.miejski.keepit.domain.listNotes.items.Item
 
 data class ListNoteCreatedEvent(
     @field:TaggedFieldSerializer.Tag(1) private val noteID: String = "",
@@ -15,3 +16,8 @@ data class ListNoteCreatedEvent(
 data class ListNoteItem(
     @field:TaggedFieldSerializer.Tag(0) val id: String = "",
     @field:TaggedFieldSerializer.Tag(1) val content: String = "")
+
+
+fun ListNoteItem.toItem(): Item {
+    return Item(this.id, this.content)
+}

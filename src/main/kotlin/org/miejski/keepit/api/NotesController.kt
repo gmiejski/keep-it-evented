@@ -4,6 +4,7 @@ import org.miejski.keepit.domain.NoteType
 import org.miejski.keepit.domain.NotesFacade
 import org.miejski.keepit.domain.listNotes.ListNotesDTO
 import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
+import org.miejski.keepit.domain.listNotes.items.AddListItemCommand
 import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
 import org.miejski.keepit.domain.notes.create.CreateNoteCommand
 import org.miejski.keepit.domain.notes.edit.EditNoteCommand
@@ -51,4 +52,12 @@ class NotesController(val notesFacade: NotesFacade) {
     fun getListNotes(): ResponseEntity<ListNotesDTO> {
         return ResponseEntity.ok(notesFacade.getListNotes(activeUserId))
     }
+
+    @RequestMapping(value = ["/listNotes/{id}"], method = arrayOf(RequestMethod.POST))
+    fun addListItem(@RequestBody addListItemCommand: AddListItemCommand): ResponseEntity<Void> {
+        notesFacade.addListItem(activeUserId, addListItemCommand)
+        return ResponseEntity.ok().build()
+    }
+
+
 }

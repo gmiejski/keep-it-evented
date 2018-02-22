@@ -9,6 +9,5 @@ abstract class BasicEvent : Event {
 
     override fun eventTime(): ZonedDateTime {
         return eventTime
-
     }
 }

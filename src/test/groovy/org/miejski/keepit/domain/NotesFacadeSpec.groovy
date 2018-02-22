@@ -10,15 +10,15 @@ class NotesFacadeSpec extends Specification {
     def notesFacade = new Configuration().testNotesFacade()
     def createNoteCommand = new CreateNoteCommand("First note")
     def createNoteCommand2 = new CreateNoteCommand("Second note")
-    def customerId = UUID.randomUUID().toString()
+    def userID = UUID.randomUUID().toString()
 
     def "returns list of notes created by user"() {
         given:
-        notesFacade.createNote(customerId, createNoteCommand)
-        notesFacade.createNote(customerId, createNoteCommand2)
+        notesFacade.createNote(userID, createNoteCommand)
+        notesFacade.createNote(userID, createNoteCommand2)
 
         when:
-        def notes = notesFacade.getNotes(customerId, [] as Set)
+        def notes = notesFacade.getNotes(userID, [] as Set)
 
         then:
         notes.notes*.content as Set == [createNoteCommand, createNoteCommand2]*.content as Set
@@ -26,36 +26,36 @@ class NotesFacadeSpec extends Specification {
 
     def "returns list of standard notes only"() {
         given:
-        def note1 = notesFacade.createNote(customerId, createNoteCommand)
-        def note2 = notesFacade.createNote(customerId, createNoteCommand2)
+        def note1 = notesFacade.createNote(userID, createNoteCommand)
+        def note2 = notesFacade.createNote(userID, createNoteCommand2)
 
         when:
-        notesFacade.archiveNote(customerId, new ArchiveNoteCommand(note1.id))
+        notesFacade.archiveNote(userID, new ArchiveNoteCommand(note1.id))
 
         then:
-        def notes = notesFacade.getNotes(customerId, [NoteType.STANDARD] as Set)
+        def notes = notesFacade.getNotes(userID, [NoteType.STANDARD] as Set)
         notes.notes*.content as Set == [createNoteCommand2]*.content as Set
     }
 
     def "Archived notes are not retrieved only on archived notes listing"() {
         given:
-        def note1 = notesFacade.createNote(customerId, createNoteCommand)
-        def note2 = notesFacade.createNote(customerId, createNoteCommand2)
+        def note1 = notesFacade.createNote(userID, createNoteCommand)
+        def note2 = notesFacade.createNote(userID, createNoteCommand2)
 
         when:
-        def noteArchievedResponse = notesFacade.archiveNote(customerId, new ArchiveNoteCommand(note2.id))
+        def noteArchievedResponse = notesFacade.archiveNote(userID, new ArchiveNoteCommand(note2.id))
 
         then:
         noteArchievedResponse.id == note2.id
 
         when: "retrieving archived notes"
-        def archievedNotesResponse = notesFacade.getNotes(customerId, [NoteType.ARCHIVED] as Set)
+        def archievedNotesResponse = notesFacade.getNotes(userID, [NoteType.ARCHIVED] as Set)
 
         then: "archived notes are returned only"
         archievedNotesResponse.notes as Set == [new NoteDto(note2.id, note2.content)] as Set
 
         and: "when retrieving standard notes"
-        def standardNotesResponse = notesFacade.getNotes(customerId, [NoteType.STANDARD] as Set)
+        def standardNotesResponse = notesFacade.getNotes(userID, [NoteType.STANDARD] as Set)
 
         then: "only non-archived are returned"
         standardNotesResponse.notes as Set == [new NoteDto(note1.id, note1.content)] as Set
