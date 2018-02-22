@@ -1,11 +1,13 @@
 package org.miejski.keepit.domain.notes
 
 import org.miejski.keepit.api.NoteDto
-import org.miejski.keepit.domain.Aggregate
+import org.miejski.keepit.domain.NoteType
+import org.miejski.keepit.domain.aggregate.Aggregate
 import org.miejski.keepit.domain.common.events.Event
 import org.miejski.keepit.domain.notes.archive.NoteArchivedEvent
 import org.miejski.keepit.domain.notes.create.NoteCreatedEvent
 import org.miejski.keepit.domain.notes.edit.NoteEditedEvent
+
 
 class Note(private var content: String) : Aggregate {
 
@@ -18,10 +20,10 @@ class Note(private var content: String) : Aggregate {
     }
 
     fun toDto(): NoteDto {
-        return NoteDto(content)
+        return NoteDto(ID(), content)
     }
 
-    fun applyEvent(event: Event): Note {
+    override fun applyEvent(event: Event) {
         when (event) {
             is NoteCreatedEvent -> {
                 this.content = event.content
@@ -34,7 +36,6 @@ class Note(private var content: String) : Aggregate {
                 this.type = NoteType.ARCHIVED
             }
         }
-        return this
     }
 }
 

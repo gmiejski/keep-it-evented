@@ -1,13 +1,10 @@
 package org.miejski.keepit.domain.notes
 
-data class UserNotesAggregateID(val customerID: String, val aggName: String
+import org.miejski.keepit.domain.aggregate.AggregateNameID
+import org.miejski.keepit.domain.aggregate.aggregateNameID
 
-) {
-    override fun toString(): String {
-        return "$customerID:$aggName"
-    }
-}
+const val NOTES_AGGREGATE_NAME = "NoteAggregate"
 
-fun CreateNotesAggregateID(customerID: String): UserNotesAggregateID {
-    return UserNotesAggregateID(customerID, "NoteAggregate")
+fun CreateNotesAggregateID(customerID: String): AggregateNameID {
+    return aggregateNameID(customerID, NOTES_AGGREGATE_NAME)
 }

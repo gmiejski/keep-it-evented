@@ -19,7 +19,7 @@ class CassandraEventRow {
 
     @ClusteringColumn(1)
     @Column(name = "event_time")
-    lateinit var eventTime: ZonedDateTime
+    lateinit var eventTime: ZonedDateTime // TODO move to event itself
 
     @Column(name = "event_blob")
     lateinit var eventBlob: ByteBuffer

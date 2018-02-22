@@ -5,22 +5,16 @@ import com.esotericsoftware.kryo.io.Input
 import com.esotericsoftware.kryo.io.Output
 import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer
 import org.miejski.keepit.domain.common.events.Event
-import org.miejski.keepit.domain.notes.archive.NoteArchivedEvent
-import org.miejski.keepit.domain.notes.create.NoteCreatedEvent
-import org.miejski.keepit.domain.notes.edit.NoteEditedEvent
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import kotlin.concurrent.getOrSet
+import kotlin.reflect.KClass
 
-class EventSerializer {
+class EventSerializer(private val events: List<Class<out Event>>) {
 
     val myThreadLocal = ThreadLocal<Kryo>()
 
-    val classByName = mapOf(
-        Pair(NoteCreatedEvent::class.java.simpleName, NoteCreatedEvent::class.javaObjectType),
-        Pair(NoteEditedEvent::class.java.simpleName, NoteEditedEvent::class.javaObjectType),
-        Pair(NoteArchivedEvent::class.java.simpleName, NoteArchivedEvent::class.javaObjectType)
-    )
+    val classByName = events.classesByNames()
 
     fun serialize(domainEvent: Event): Pair<ByteBuffer, String> {
         val output = Output(ByteArrayOutputStream())
@@ -35,10 +29,15 @@ class EventSerializer {
 
     private fun getKryo() = myThreadLocal.getOrSet {
         val kryo = Kryo()
-        kryo.register(NoteCreatedEvent::class.java, TaggedFieldSerializer<NoteCreatedEvent>(kryo, NoteCreatedEvent::class.javaObjectType))
-        kryo.register(NoteEditedEvent::class.java, TaggedFieldSerializer<NoteEditedEvent>(kryo, NoteEditedEvent::class.javaObjectType))
-        kryo.register(NoteArchivedEvent::class.java, TaggedFieldSerializer<NoteArchivedEvent>(kryo, NoteArchivedEvent::class.javaObjectType))
+        events.forEach {
+            kryo.register(it::class.java, TaggedFieldSerializer<Event>(kryo, it::class.javaObjectType))
+        }
         return kryo
     }
+}
+
+private fun List<Class<out Event>>.classesByNames(): Map<String, Class<out Event>> {
+    val pair = this.map { Pair(it.simpleName, it) }
+    return mapOf(*pair.toTypedArray())
 }
 

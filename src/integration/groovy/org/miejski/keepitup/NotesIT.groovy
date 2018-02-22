@@ -2,7 +2,7 @@ package org.miejski.keepitup
 
 import org.miejski.keepit.api.NoteDto
 import org.miejski.keepit.api.NotesController
-import org.miejski.keepit.domain.notes.NoteType
+import org.miejski.keepit.domain.NoteType
 import org.miejski.keepit.domain.notes.archive.ArchiveNoteCommand
 import org.miejski.keepit.domain.notes.create.CreateNoteCommand
 import org.miejski.keepit.domain.notes.edit.EditNoteCommand
@@ -19,22 +19,21 @@ class NotesIT extends MainTest {
 
     def "returns list of text notes created by user"() {
         given:
-        controller.createNote(createNote1)
-        controller.createNote(createNote2)
+        def noteCreated = controller.createNote(createNote1)
+        def noteCreated2 = controller.createNote(createNote2)
 
         when:
         def notes = controller.getNotes([] as Set).getBody()
 
         then:
-        notes.notes as Set == [new NoteDto("Some content"),
-                               new NoteDto("Another note")] as Set
+        notes.notes as Set == [new NoteDto(noteCreated.body.noteId, "Some content"),
+                               new NoteDto(noteCreated2.body.noteId, "Another note")] as Set
 
         when: "retrieve al standard notes"
         def standardNotes = controller.getNotes([NoteType.STANDARD] as Set).getBody()
 
         then:
         notes.notes as Set == standardNotes.notes as Set
-
     }
 
     def "updated note has new content and new last modification date"() {
@@ -47,7 +46,7 @@ class NotesIT extends MainTest {
         then:
         editResponse.statusCode == HttpStatus.OK
         def notes = controller.getNotes([] as Set).getBody()
-        notes.notes as Set == [new NoteDto("New content")] as Set
+        notes.notes as Set == [new NoteDto(noteCreatedResponse.body.noteId, "New content")] as Set
     }
 
     def "Archived notes are not retrieved only on archived notes listing"() {
@@ -67,13 +66,13 @@ class NotesIT extends MainTest {
 
         then: "archived notes are returned only"
         archievedNotesResponse.statusCode == HttpStatus.OK
-        archievedNotesResponse.body.notes as Set == [new NoteDto(createNote2.content)] as Set
+        archievedNotesResponse.body.notes as Set == [new NoteDto(note2.noteId, createNote2.content)] as Set
 
         and: "when retrieving standard notes"
         def standardNotesResponse = controller.getNotes([NoteType.STANDARD] as Set)
 
         then: "only non-archived are returned"
         standardNotesResponse.statusCode == HttpStatus.OK
-        standardNotesResponse.body.notes as Set == [new NoteDto(createNote1.content)] as Set
+        standardNotesResponse.body.notes as Set == [new NoteDto(note1.noteId, createNote1.content)] as Set
     }
 }
