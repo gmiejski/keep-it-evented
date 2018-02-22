@@ -2,6 +2,7 @@ package org.miejski.keepit.domain.listNotes
 
 import org.miejski.keepit.domain.aggregate.Aggregate
 import org.miejski.keepit.domain.common.events.Event
+import org.miejski.keepit.domain.listNotes.complete.ListItemCompletedEvent
 import org.miejski.keepit.domain.listNotes.create.ListNoteCreatedEvent
 import org.miejski.keepit.domain.listNotes.create.toItem
 import org.miejski.keepit.domain.listNotes.items.Item
@@ -31,7 +32,15 @@ class ListNote : Aggregate {
                 val item = event.listItem ?: throw RuntimeException("Trying to add empty list item with eventID $event.")
                 this.items = this.items.plus(item.toItem())
             }
+            is ListItemCompletedEvent -> {
+                val item = getItem(event.itemID) ?: throw RuntimeException("TODO")
+                item.complete()
+            }
         }
+    }
+
+    fun getItem(itemID: String): Item? {
+        return items.find { it.id == itemID }
     }
 }
 

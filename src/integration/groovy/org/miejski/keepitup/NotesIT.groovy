@@ -23,14 +23,14 @@ class NotesIT extends MainTest {
         def noteCreated2 = controller.createNote(createNote2)
 
         when:
-        def notes = controller.getNotes([] as Set).getBody()
+        def notes = controller.getNotes([] as Set).body
 
         then:
         notes.notes as Set == [new NoteDto(noteCreated.body.noteId, "Some content"),
                                new NoteDto(noteCreated2.body.noteId, "Another note")] as Set
 
         when: "retrieve al standard notes"
-        def standardNotes = controller.getNotes([NoteType.STANDARD] as Set).getBody()
+        def standardNotes = controller.getNotes([NoteType.STANDARD] as Set).body
 
         then:
         notes.notes as Set == standardNotes.notes as Set
@@ -45,7 +45,7 @@ class NotesIT extends MainTest {
 
         then:
         editResponse.statusCode == HttpStatus.OK
-        def notes = controller.getNotes([] as Set).getBody()
+        def notes = controller.getNotes([] as Set).body
         notes.notes as Set == [new NoteDto(noteCreatedResponse.body.noteId, "New content")] as Set
     }
 

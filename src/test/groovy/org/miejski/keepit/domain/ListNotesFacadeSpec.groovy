@@ -1,5 +1,6 @@
 package org.miejski.keepit.domain
 
+import org.miejski.keepit.domain.listNotes.complete.CompleteItemCommand
 import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
 import org.miejski.keepit.domain.listNotes.items.AddListItemCommand
 import spock.lang.Specification
@@ -40,5 +41,18 @@ class ListNotesFacadeSpec extends Specification {
         def notes = notesFacade.getListNotes(userID)
         notes.notes.size() == 1
         notes.notes.first().items*.content as Set == createListNoteCommand.tasks + [addItemCommand.content] as Set
+    }
+
+    def "marking note item as completed"() {
+        given:
+        def note = notesFacade.createListNote(userID, createListNoteCommand)
+        def completeCommand = new CompleteItemCommand(note.id, note.items.first().id)
+        when:
+        notesFacade.completeItem(userID, completeCommand)
+
+        then:
+        def notes = notesFacade.getListNotes(userID)
+        notes.notes.size() == 1
+        notes.getNote(note.id)?.getItem(note.items.first().id)?.isCompleted
     }
 }

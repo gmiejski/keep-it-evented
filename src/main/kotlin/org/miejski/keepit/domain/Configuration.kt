@@ -5,6 +5,7 @@ import org.miejski.keepit.domain.aggregate.EventsHandler
 import org.miejski.keepit.domain.listNotes.ListNotesCommandHandler
 import org.miejski.keepit.domain.listNotes.ListNotesService
 import org.miejski.keepit.domain.listNotes.NewListNote
+import org.miejski.keepit.domain.listNotes.complete.ListItemCompletedEvent
 import org.miejski.keepit.domain.listNotes.create.ListNoteCreatedEvent
 import org.miejski.keepit.domain.listNotes.items.ListItemAddedEvent
 import org.miejski.keepit.domain.notes.NewNote
@@ -47,7 +48,8 @@ class Configuration {
             NoteEditedEvent::class.java,
             NoteArchivedEvent::class.java,
             ListNoteCreatedEvent::class.java,
-            ListItemAddedEvent::class.java
+            ListItemAddedEvent::class.java,
+            ListItemCompletedEvent::class.java
         ))
     }
 }
