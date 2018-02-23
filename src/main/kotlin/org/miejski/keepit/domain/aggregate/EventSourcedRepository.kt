@@ -28,8 +28,8 @@ class EventSourcedRepository<T : Aggregate>(val commandHandler: CommandHandler<T
 
     override fun update(aggregateNameID: AggregateNameID, aggregate: T, command: Command): T {
         val events = commandHandler.applyCommand(aggregate, command)
-        eventStore.saveAll(aggregateNameID, events)
         eventsHandler.applyEvents(aggregate, events)
+        eventStore.saveAll(aggregateNameID, events)
         return aggregate
     }
 }

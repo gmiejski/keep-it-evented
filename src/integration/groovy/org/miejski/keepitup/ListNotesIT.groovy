@@ -3,6 +3,7 @@ package org.miejski.keepitup
 import org.miejski.keepit.api.ListNotesController
 import org.miejski.keepit.api.NotesController
 import org.miejski.keepit.domain.listNotes.complete.CompleteItemCommand
+import org.miejski.keepit.domain.listNotes.complete.UncompleteItemCommand
 import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
 import org.miejski.keepit.domain.listNotes.items.AddListItemCommand
 import org.miejski.keepitup.configuration.MainTest
@@ -54,7 +55,22 @@ class ListNotesIT extends MainTest {
 
         then:
         def notes = controller.getListNotes().body
-        notes.notes.size() == 1
         notes.getNote(note.noteId)?.getItem(completedItemID)?.isCompleted
+    }
+
+    def "marking note item as uncompleted"() {
+        given:
+        def note = controller.createListNote(createNote1).body
+        def completedItemID = controller.getListNotes().body.getNote(note.noteId).items.first().id
+        def completeCommand = new CompleteItemCommand(note.noteId, completedItemID)
+        controller.completeItem(completeCommand)
+        def uncompleteCommand = new UncompleteItemCommand(note.noteId, completedItemID)
+
+        when:
+        controller.uncompleteItem(uncompleteCommand)
+
+        then:
+        def notes = controller.getListNotes().body
+        !notes.getNote(note.noteId)?.getItem(completedItemID)?.isCompleted
     }
 }

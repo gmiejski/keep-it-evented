@@ -3,6 +3,7 @@ package org.miejski.keepit.api
 import org.miejski.keepit.domain.listNotes.ListNotesDTO
 import org.miejski.keepit.domain.listNotes.ListNotesService
 import org.miejski.keepit.domain.listNotes.complete.CompleteItemCommand
+import org.miejski.keepit.domain.listNotes.complete.UncompleteItemCommand
 import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
 import org.miejski.keepit.domain.listNotes.items.AddListItemCommand
 import org.springframework.http.ResponseEntity
@@ -36,9 +37,15 @@ class ListNotesController(val listNotesService: ListNotesService) {
         return ResponseEntity.ok().build()
     }
 
-    @RequestMapping(value = ["/listNotes/{id}/items/{itemId}"], method = arrayOf(RequestMethod.POST))
+    @RequestMapping(value = ["/listNotes/{id}/items/{itemId}/actions/complete"], method = arrayOf(RequestMethod.POST))
     fun completeItem(@RequestBody completeItemCommand: CompleteItemCommand): ResponseEntity<Void> {
         listNotesService.completeItem(activeUserId, completeItemCommand)
+        return ResponseEntity.ok().build()
+    }
+
+    @RequestMapping(value = ["/listNotes/{id}/items/{itemId}/actions/uncomplete"], method = arrayOf(RequestMethod.POST))
+    fun uncompleteItem(@RequestBody uncompleteItemCommand: UncompleteItemCommand): ResponseEntity<Void> {
+        listNotesService.uncompleteItem(activeUserId, uncompleteItemCommand)
         return ResponseEntity.ok().build()
     }
 }

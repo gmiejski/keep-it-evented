@@ -1,6 +1,7 @@
 package org.miejski.keepit.domain.listNotes
 
 import org.miejski.keepit.domain.listNotes.complete.CompleteItemCommand
+import org.miejski.keepit.domain.listNotes.complete.UncompleteItemCommand
 import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
 import org.miejski.keepit.domain.listNotes.items.AddListItemCommand
 import org.miejski.keepit.infrastructure.eventstore.InMemoryEventStore
@@ -52,7 +53,74 @@ class ListNotesServiceSpec extends Specification {
 
         then:
         def notes = listNotesService.getAll(userID)
-        notes.notes.size() == 1
         notes.getNote(note.id)?.getItem(note.items.first().id)?.isCompleted
+    }
+
+    def "marking unexisting note item as completed throws error"() {
+        given:
+        def note = listNotesService.createListNote(userID, createListNoteCommand)
+        def completeCommand = new CompleteItemCommand(note.id, "notExistingItemID")
+        when:
+        listNotesService.completeItem(userID, completeCommand)
+
+        then:
+        thrown(ListItemNotFound)
+    }
+
+    def "marking completed note item as completed throws error"() {
+        given:
+        def note = listNotesService.createListNote(userID, createListNoteCommand)
+        def completeCommand = new CompleteItemCommand(note.id, note.items.first().id)
+
+        when:
+        listNotesService.completeItem(userID, completeCommand)
+
+        then:
+        def notes = listNotesService.getAll(userID)
+        notes.getNote(note.id)?.getItem(note.items.first().id)?.isCompleted
+
+        when:
+        listNotesService.completeItem(userID, completeCommand)
+
+        then:
+        thrown(Exception)
+    }
+
+    def "marking completed note item as uncompleted"() {
+        given:
+        def note = listNotesService.createListNote(userID, createListNoteCommand)
+        def completeCommand = new CompleteItemCommand(note.id, note.items.first().id)
+        listNotesService.completeItem(userID, completeCommand)
+        def uncompletedCommand = new UncompleteItemCommand(note.id, note.items.first().id)
+
+        when:
+        listNotesService.uncompleteItem(userID, uncompletedCommand)
+
+        then:
+        def notes = listNotesService.getAll(userID)
+        notes.notes.size() == 1
+        !notes.getNote(note.id)?.getItem(note.items.first().id)?.isCompleted
+    }
+
+    def "marking uncompleted note item as uncompleted throws error"() {
+        given:
+        def note = listNotesService.createListNote(userID, createListNoteCommand)
+        def completeCommand = new CompleteItemCommand(note.id, note.items.first().id)
+        listNotesService.completeItem(userID, completeCommand)
+        def uncompletedCommand = new UncompleteItemCommand(note.id, note.items.first().id)
+
+        when:
+        listNotesService.uncompleteItem(userID, uncompletedCommand)
+
+        then:
+        def notes = listNotesService.getAll(userID)
+        !notes.getNote(note.id)?.getItem(note.items.first().id)?.isCompleted
+
+
+        when:
+        listNotesService.uncompleteItem(userID, uncompletedCommand)
+
+        then:
+        thrown(Exception)
     }
 }

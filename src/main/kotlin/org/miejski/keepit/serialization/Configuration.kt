@@ -1,6 +1,7 @@
 package org.miejski.keepit.serialization
 
 import org.miejski.keepit.domain.listNotes.complete.ListItemCompletedEvent
+import org.miejski.keepit.domain.listNotes.complete.ListItemUncompletedEvent
 import org.miejski.keepit.domain.listNotes.create.ListNoteCreatedEvent
 import org.miejski.keepit.domain.listNotes.items.ListItemAddedEvent
 import org.miejski.keepit.domain.notes.archive.NoteArchivedEvent
@@ -19,7 +20,8 @@ class Configuration {
             NoteArchivedEvent::class.java,
             ListNoteCreatedEvent::class.java,
             ListItemAddedEvent::class.java,
-            ListItemCompletedEvent::class.java
+            ListItemCompletedEvent::class.java,
+            ListItemUncompletedEvent::class.java
         ))
     }
 

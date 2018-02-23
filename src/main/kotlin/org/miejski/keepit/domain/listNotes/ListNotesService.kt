@@ -2,11 +2,13 @@ package org.miejski.keepit.domain.listNotes
 
 import org.miejski.keepit.domain.aggregate.DomainRepository
 import org.miejski.keepit.domain.listNotes.complete.CompleteItemCommand
+import org.miejski.keepit.domain.listNotes.complete.UncompleteItemCommand
 import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
 import org.miejski.keepit.domain.listNotes.items.AddListItemCommand
 import org.miejski.keepit.domain.notes.NoteNotFound
 
 class ListNotesService(val listNotesRepository: DomainRepository<ListNote>) {
+
     fun createListNote(user: String, command: CreateListNoteCommand): ListNoteDTO {
         return listNotesRepository.update(CreateListNotesAggregateID(user), NewListNote(), command).toDto()
     }
@@ -23,6 +25,15 @@ class ListNotesService(val listNotesRepository: DomainRepository<ListNote>) {
     fun completeItem(user: String, command: CompleteItemCommand) {
         val note = listNotesRepository.get(CreateListNotesAggregateID(user), command.noteID) ?: throw NoteNotFound(user, command.noteID)
         val item = note.getItem(command.itemID) ?: throw ListItemNotFound(user, command.noteID, command.itemID)
+        listNotesRepository.update(CreateListNotesAggregateID(user), note, command)
+    }
+
+    fun uncompleteItem(user: String, command: UncompleteItemCommand) {
+        val note = listNotesRepository.get(CreateListNotesAggregateID(user), command.noteID) ?: throw NoteNotFound(user, command.noteID)
+        val item = note.getItem(command.itemID) ?: throw ListItemNotFound(user, command.noteID, command.itemID)
+        if (!item.isCompleted) {
+            throw RuntimeException("Item ${command.itemID} from note ${command.noteID} already uncompleted!")
+        }
         listNotesRepository.update(CreateListNotesAggregateID(user), note, command)
     }
 }
