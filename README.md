@@ -10,7 +10,7 @@ Functionalities:
 - [ ] user can remove Items from ListNote
 - [ ] events have IDs
 - [x] user can complete list items
-- [ ] user can mark list items as uncompleted
+- [x] user can mark list items as uncompleted
 - [ ] user can reorder Items within ListNote
 - [ ] user can move Items to another TaskNote
 - [ ] user can tag/untag notes and search for notes with tag

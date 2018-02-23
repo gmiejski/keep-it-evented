@@ -1,8 +1,8 @@
-package org.miejski.keepit.infrastructure.cassandra
+package org.miejski.keepit.infrastructure.eventstore.cassandra
 
 import org.miejski.keepit.domain.aggregate.AggregateNameID
 import org.miejski.keepit.domain.common.events.Event
-import org.miejski.keepit.infrastructure.eventstore.EventStore
+import org.miejski.keepit.domain.aggregate.EventStore
 import org.miejski.keepit.serialization.EventSerializer
 
 

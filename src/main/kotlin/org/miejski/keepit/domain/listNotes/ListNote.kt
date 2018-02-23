@@ -3,6 +3,7 @@ package org.miejski.keepit.domain.listNotes
 import org.miejski.keepit.domain.aggregate.Aggregate
 import org.miejski.keepit.domain.common.events.Event
 import org.miejski.keepit.domain.listNotes.complete.ListItemCompletedEvent
+import org.miejski.keepit.domain.listNotes.complete.ListItemUncompletedEvent
 import org.miejski.keepit.domain.listNotes.create.ListNoteCreatedEvent
 import org.miejski.keepit.domain.listNotes.create.toItem
 import org.miejski.keepit.domain.listNotes.items.Item
@@ -35,6 +36,10 @@ class ListNote : Aggregate {
             is ListItemCompletedEvent -> {
                 val item = getItem(event.itemID) ?: throw RuntimeException("TODO")
                 item.complete()
+            }
+            is ListItemUncompletedEvent -> {
+                val item = getItem(event.itemID) ?: throw RuntimeException("TODO")
+                item.uncomplete()
             }
         }
     }
