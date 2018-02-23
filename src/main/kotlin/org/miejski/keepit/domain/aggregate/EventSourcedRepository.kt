@@ -2,7 +2,6 @@ package org.miejski.keepit.domain.aggregate
 
 import org.miejski.keepit.domain.common.commands.Command
 import org.miejski.keepit.domain.common.events.Event
-import org.miejski.keepit.infrastructure.eventstore.EventStore
 
 class EventSourcedRepository<T : Aggregate>(val commandHandler: CommandHandler<T>,
                                             val eventsHandler: EventsHandler,

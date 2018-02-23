@@ -1,6 +1,5 @@
-package org.miejski.keepit.infrastructure.eventstore
+package org.miejski.keepit.domain.aggregate
 
-import org.miejski.keepit.domain.aggregate.AggregateNameID
 import org.miejski.keepit.domain.common.events.Event
 
 interface EventStore {

@@ -1,5 +1,6 @@
 package org.miejski.keepitup
 
+import org.miejski.keepit.api.ListNotesController
 import org.miejski.keepit.api.NotesController
 import org.miejski.keepit.domain.listNotes.complete.CompleteItemCommand
 import org.miejski.keepit.domain.listNotes.create.CreateListNoteCommand
@@ -10,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 class ListNotesIT extends MainTest {
 
     @Autowired
-    NotesController controller
+    ListNotesController controller
     private CreateListNoteCommand createNote1 = new CreateListNoteCommand(["first", "second"])
     private CreateListNoteCommand createNote2 = new CreateListNoteCommand(["item3", "item4"])
 

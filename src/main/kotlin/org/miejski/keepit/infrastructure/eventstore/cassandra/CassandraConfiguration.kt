@@ -1,4 +1,4 @@
-package org.miejski.keepit.infrastructure.cassandra
+package org.miejski.keepit.infrastructure.eventstore.cassandra
 
 import com.datastax.driver.core.Cluster
 import com.datastax.driver.core.DataType
